@@ -14,6 +14,6 @@ git clone -b lineage-23.2-tweaked https://github.com/ximi-daisy/android_bootable
 
 git clone -b lineage-23.2-tweaked https://github.com/ximi-daisy/android_vendor_lineage --depth=1 vendor/lineage
 
-# git clone -b lineage-23.2-tweaked https://github.com/ximi-daisy/android_device_lineage_sepolicy/ --depth=1 device/lineage/sepolicy
+git clone -b lineage-23.2-tweaked https://github.com/ximi-daisy/android_device_lineage_sepolicy/ --depth=1 device/lineage/sepolicy
 
 git clone -b lineage-23.2 https://github.com/LineageOS/android_hardware_xiaomi --depth=1 hardware/xiaomi
