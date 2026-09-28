@@ -1,0 +1,31 @@
+From 44abb6e982350b9672f3eaa1abfc74a677fe069b Mon Sep 17 00:00:00 2001
+From: Juhyung Park <qkrwngud825@gmail.com>
+Date: Sat, 12 Feb 2022 18:24:17 +0900
+Subject: [PATCH] jemalloc: enable MADV_FREE usage
+
+This is only supported with Linux v4.5+ but we don't support devices that old
+
+Signed-off-by: Juhyung Park <qkrwngud825@gmail.com>
+---
+ include/jemalloc/internal/jemalloc_internal_defs.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/external/jemalloc_new/include/jemalloc/internal/jemalloc_internal_defs.h b/external/jemalloc_new/include/jemalloc/internal/jemalloc_internal_defs.h
+index 37ab466f..d7e3f8b5 100644
+--- a/external/jemalloc_new/include/jemalloc/internal/jemalloc_internal_defs.h
++++ b/external/jemalloc_new/include/jemalloc/internal/jemalloc_internal_defs.h
+@@ -310,12 +310,12 @@
+  *                                 system overhead.
+  */
+ /* MADV_FREE available since kernel 4.5 but not all devices support this yet. */
+-/* #undef JEMALLOC_PURGE_MADVISE_FREE */
++#define JEMALLOC_PURGE_MADVISE_FREE 
+ #define JEMALLOC_PURGE_MADVISE_DONTNEED 
+ #define JEMALLOC_PURGE_MADVISE_DONTNEED_ZEROS 
+ 
+ /* Defined if madvise(2) is available but MADV_FREE is not (x86 Linux only). */
+-#define JEMALLOC_DEFINE_MADVISE_FREE 
++/* #undef JEMALLOC_DEFINE_MADVISE_FREE */
+ 
+ /*
+  * Defined if MADV_DO[NT]DUMP is supported as an argument to madvise.
