@@ -1,0 +1,32 @@
+From 1c7a6ddef09952b3ba6818ffb3ec5ad283b1f1fc Mon Sep 17 00:00:00 2001
+From: Han Wang <wanghan1995315@gmail.com>
+Date: Thu, 24 Sep 2026 10:18:44 -0700
+Subject: [PATCH] Fix another side channel leakage for pm#getLaunchIntentSenderForPackage
+
+Intent is different for an non-existing package and existing package.
+So if caller pass an existing package and an non-existing pacakge to this method, pacakge visibility can get leaked by using equals() or hashCode() to check if intents are same. Use setIdenifier() to have different intents produced all the time.
+
+Change-Id: Id3169375e5416d11d44efd29a5c3c4a2e6e194b3
+---
+
+diff --git a/services/core/java/com/android/server/pm/ResolveIntentHelper.java b/services/core/java/com/android/server/pm/ResolveIntentHelper.java
+index 2692d52..3369e93 100644
+--- a/frameworks/base/services/core/java/com/android/server/pm/ResolveIntentHelper.java
++++ b/frameworks/base/services/core/java/com/android/server/pm/ResolveIntentHelper.java
+@@ -63,6 +63,7 @@
+ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Objects;
++import java.util.UUID;
+ import java.util.function.Supplier;
+ 
+ final class ResolveIntentHelper {
+@@ -309,6 +310,8 @@
+             intent.setClassName(ris.get(0).activityInfo.packageName,
+                     ris.get(0).activityInfo.name);
+         }
++        // Prevent side channel attack by comparing intents.
++        intent.setIdentifier(UUID.randomUUID().toString());
+         final IIntentSender target = ActivityManager.getService().getIntentSenderWithFeature(
+                 ActivityManager.INTENT_SENDER_ACTIVITY, callingPackage,
+                 featureId, null /* token */, null /* resultWho */,
